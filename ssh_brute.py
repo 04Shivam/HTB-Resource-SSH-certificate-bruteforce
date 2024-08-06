@@ -2,7 +2,6 @@ import argparse
 import os
 import subprocess
 import paramiko
-import paramiko.ssh_exception
 
 def get_args():
     parser = argparse.ArgumentParser(description="Details required to perform bruteforce of keys.")
@@ -58,11 +57,7 @@ def sshLogin(hostname, username, private_key_file, cert_filename):
     except paramiko.SSHException as e:
         print(f'[-] Could not establish SSH connection: {e}')
         return False
-    
-    except paramiko.PasswordRequiredException:
-        print("[-] Private key requires a passphrase. Exiting program.")
-        return False
-
+        
     except ValueError as e:
         if "PublicBlob type ssh-rsa-cert-v01@openssh.com incompatible with key type ssh-dss" in str(e):
             print("[-] Incompatible key")
